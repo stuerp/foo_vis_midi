@@ -1,5 +1,5 @@
 
-/** $VER: framework.h (2023.01.15) P. Stuer **/
+/** $VER: framework.h (2023.12.24) P. Stuer **/
 
 #pragma once
 
@@ -31,15 +31,3 @@
 
 #include "Resources.h"
 #include "API.h"
-/*
-template<class Interface>
-inline void SafeRelease(Interface ** interfaceToRelease)
-{
-    if (*interfaceToRelease)
-    {
-        (*interfaceToRelease)->Release();
-
-        (*interfaceToRelease) = nullptr;
-    }
-}
-*/

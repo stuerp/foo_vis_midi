@@ -18,7 +18,7 @@
     <ClInclude Include="IMIDIReceiver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="API.cpp" />
     <ClCompile Include="MusicKeyboard.cpp" />
     <ClCompile Include="MusicKeyboardUIElement.cpp" />

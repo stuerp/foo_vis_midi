@@ -3,6 +3,8 @@
 
 [foo_vis_midi](https://github.com/stuerp/foo_vis_midi/releases) is a [foobar2000](https://www.foobar2000.org/) component to visualize MIDI events.
 
+![Screenshot](Resources/Screenshot.png?raw=true "Screenshot")
+
 ## Features
 
 * Displays the notes played by the foo_midi component on a music keyboard.
@@ -64,7 +66,7 @@ To create the component first build the x86 configuration and next the x64 confi
 
 ## Change Log
 
-v0.1.0, 2023-12-25, *"Scratchin' the itch"*
+v0.1.0, 2023-12-24, *"Merry Christmas"*
 
 * Initial release.
 

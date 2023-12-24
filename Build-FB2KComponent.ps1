@@ -6,7 +6,7 @@
 .EXAMPLE
     C:\PS> .\Build-FB2KComponent.ps1
 .OUTPUTS
-    foo_midi.fb2k-component
+    *.fb2k-component
 #>
 
 [CmdletBinding()]

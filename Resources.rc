@@ -1,20 +1,12 @@
 
-/** $VER: Resources.rc (2022.12.28) P. Stuer **/
+/** $VER: Resources.rc (2023.12.24) P. Stuer **/
 
 #include "Resources.h"
 
-#include <windows.h>
 #include <winres.h>
 
-// English (United States) resources
 language LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
-
-IDD_PREFERENCES dialogex 0, 0, 332, 288
-style DS_SETFONT | WS_CHILD
-font 8, "MS Shell Dlg", 400, 0, 0x0
-{
-}
 
 VS_VERSION_INFO versioninfo
 fileversion     NUM_FILE_MAJOR,    NUM_FILE_MINOR,    NUM_FILE_PATCH,    NUM_FILE_PRERELEASE
@@ -26,8 +18,8 @@ fileflags       VS_FF_DEBUG
 fileflags       0
 #endif
 fileos          VOS_NT_WINDOWS32
-filetype        VFT_APP
-filesubtype     0x0L
+filetype        VFT_DLL
+filesubtype     VFT2_UNKNOWN
 {
     block "StringFileInfo"
     {
@@ -50,4 +42,12 @@ filesubtype     0x0L
     {
         value "Translation", 0x409, 1252    // U.S. English, Multilingual character set
     }
+}
+
+/** Configuration dialog **/
+
+IDD_PREFERENCES dialogex 0, 0, 332, 288
+style DS_SETFONT | WS_CHILD
+font 8, "MS Shell Dlg", 400, 0, 0x0
+{
 }
