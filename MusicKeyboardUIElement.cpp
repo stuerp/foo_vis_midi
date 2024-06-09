@@ -89,7 +89,7 @@ namespace foo_vis_midi
     /// <summary>
     /// Handles a timer tick.
     /// </summary>
-    void CALLBACK MusicKeyboardWindow::TimerCallback(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_TIMER timer) noexcept
+    void CALLBACK MusicKeyboardWindow::TimerCallback(PTP_CALLBACK_INSTANCE /*instance*/, PVOID context, PTP_TIMER /*timer*/) noexcept
     {
         ((MusicKeyboardWindow *) context)->Render();
     }
