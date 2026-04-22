@@ -1,19 +1,23 @@
 
 /** $VER: MusicKeyboardUIElement.cpp (2023.12.24) P. Stuer **/
 
+#include "pch.h"
+
 #include "MusicKeyboardUIElement.h"
+
+#include "API.h"
+#include "Keyboard.h"
 
 namespace foo_vis_midi
 {
     /// <summary>
     /// Initializes a new instance.
     /// </summary>
-    MusicKeyboardWindow::MusicKeyboardWindow(ui_element_config::ptr config, ui_element_instance_callback_ptr callback) : m_bMsgHandled(FALSE), m_callback(callback),
-        _Config(config)
+    MusicKeyboardWindow::MusicKeyboardWindow(ui_element_config::ptr config, ui_element_instance_callback_ptr callback) : m_bMsgHandled(FALSE), m_callback(callback), _Config(config)
     {
         _This = this;
 
-        _Keyboard = std::make_unique<Keyboard>();
+        _Keyboard = std::make_unique<keyboard_t>();
     }
 
     /// <summary>
@@ -99,46 +103,45 @@ namespace foo_vis_midi
     /// </summary>
     void MusicKeyboardWindow::UpdateRefreshRateLimit() const noexcept
     {
-        if (_ThreadPoolTimer)
-        {
-            FILETIME DueTime = { };
+        if (_ThreadPoolTimer == nullptr)
+            return;
 
-            ::SetThreadpoolTimer(_ThreadPoolTimer, &DueTime, 1000 / (DWORD) 50, 0);
-        }
+        FILETIME DueTime = { };
+
+        ::SetThreadpoolTimer(_ThreadPoolTimer, &DueTime, 1000 / (DWORD) 50, 0);
     }
 
     #pragma endregion
 
     #pragma region Rendering
 
-    HRESULT MusicKeyboardWindow::Render()
+    HRESULT MusicKeyboardWindow::Render() noexcept
     {
-        if (!TryEnterCriticalSection(&_Lock))
+        if (!::TryEnterCriticalSection(&_Lock))
             return E_ABORT;
-
-        MIDIEvent me;
 
         while ((_Events.size() > 0) && ((_Events.front().Timestamp + 64000) < _Position))
         {
-            me = _Events.front();
+            const midi_event_t me = _Events.front();
+
             _Events.pop();
 
         #ifdef _DEBUG
             wchar_t Line[256]; ::swprintf_s(Line, _countof(Line), L"%6d/%6d: %08X, %3d\n", (int) me.Timestamp, (int) _Position, me.Message, (int) _Events.size()); ::OutputDebugStringW(Line);
         #endif
 
-            uint32_t Status = me.Message & 0xF0;
+            const uint32_t Status = me.Message & 0xF0;
 
             if ((Status != 0x80) && (Status != 0x90))
                 continue;
 
-            uint32_t Channel = me.Message & 0x0F;
+            const uint32_t Channel = me.Message & 0x0F;
 
             if (Channel == 0x09)
-                continue;; // Don't play the percussion channel.
+                continue; // Don't play the percussion channel.
 
-            uint32_t Note     = (me.Message >>  8) & 0xFF;
-            uint32_t Velocity = (me.Message >> 16) & 0xFF;
+            const uint32_t Note     = (me.Message >>  8) & 0xFF;
+            const uint32_t Velocity = (me.Message >> 16) & 0xFF;
 
             if (Status == 0x80)
                 _Keyboard->ReleaseKey(Note);
@@ -169,12 +172,12 @@ namespace foo_vis_midi
             _RenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
 
             // Paint the window background.
-            _RenderTarget->FillRectangle(D2D1::RectF(0.0f, 0.0f, RenderTargetSize.width, RenderTargetSize.height), _GridPatternBrush);
+            _RenderTarget->FillRectangle(D2D1::RectF(0.f, 0.f, RenderTargetSize.width, RenderTargetSize.height), _GridPatternBrush);
         }
 
         {
-            float x = 0.f;
-            float y = RenderTargetSize.height - _Keyboard->GetHeight();
+            const float x = 0.f;
+            const float y = RenderTargetSize.height - _Keyboard->GetHeight();
 
             hr = _Keyboard->Render(_RenderTarget, x, y);
         }
@@ -193,16 +196,16 @@ namespace foo_vis_midi
     /// <summary>
     /// Recalculates the scale of the keyboard.
     /// </summary>
-    void MusicKeyboardWindow::SetScale(ID2D1RenderTarget * renderTarget)
+    void MusicKeyboardWindow::SetScale(ID2D1RenderTarget * renderTarget) noexcept
     {
         if (_Keyboard == nullptr)
             return;
 
-        float KeyboardWidth = ::ceilf(_Keyboard->GetWidth());
+        const float KeyboardWidth = ::ceilf(_Keyboard->GetWidth());
 
         D2D1_SIZE_F RenderTargetSize = renderTarget->GetSize();
 
-        float Scale = RenderTargetSize.width / KeyboardWidth;
+        const float Scale = (KeyboardWidth != 0.f) ? RenderTargetSize.width / KeyboardWidth : 1.f;
 
         _Keyboard->SetScale(Scale);
     }
@@ -214,7 +217,7 @@ namespace foo_vis_midi
     /// <summary>
     /// Creates resources which are not bound to any device.
     /// </summary>
-    HRESULT MusicKeyboardWindow::CreateDeviceIndependentResources()
+    HRESULT MusicKeyboardWindow::CreateDeviceIndependentResources() noexcept
     {
         HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_D2DFactory);
 
@@ -227,7 +230,7 @@ namespace foo_vis_midi
     /// <summary>
     /// Creates resources which are bound to a particular Direct3D device.
     /// </summary>
-    HRESULT MusicKeyboardWindow::CreateDeviceDependentResources()
+    HRESULT MusicKeyboardWindow::CreateDeviceDependentResources() noexcept
     {
         if (_RenderTarget != nullptr)
             return S_OK;
@@ -256,7 +259,7 @@ namespace foo_vis_midi
     /// <summary>
     /// Creates a pattern brush.
     /// </summary>
-    HRESULT MusicKeyboardWindow::CreateGridPatternBrush(ID2D1RenderTarget * renderTarget, ID2D1BitmapBrush ** bitmapBrush)
+    HRESULT MusicKeyboardWindow::CreateGridPatternBrush(ID2D1RenderTarget * renderTarget, ID2D1BitmapBrush ** bitmapBrush) noexcept
     {
         CComPtr<ID2D1BitmapRenderTarget> brt;
 
@@ -297,7 +300,7 @@ namespace foo_vis_midi
     /// <summary>
     /// Discards device-specific resources which need to be recreated when a Direct3D device is lost.
     /// </summary>
-    void MusicKeyboardWindow::Dispose()
+    void MusicKeyboardWindow::Dispose() noexcept
     {
         _Keyboard->Dispose();
     }
@@ -309,9 +312,11 @@ namespace foo_vis_midi
     /// <summary>
     /// Playback advanced to new track.
     /// </summary>
-    void MusicKeyboardWindow::on_playback_new_track(metadb_handle_ptr track)
+    void MusicKeyboardWindow::on_playback_new_track(metadb_handle_ptr)
     {
-        std::queue<MIDIEvent> Empty; std::swap(_Events, Empty);
+        std::queue<midi_event_t> Empty;
+
+        std::swap(_Events, Empty);
         _Position = 0;
 
         _Keyboard->Reset();
@@ -323,7 +328,9 @@ namespace foo_vis_midi
     /// </summary>
     void MusicKeyboardWindow::on_playback_stop(play_control::t_stop_reason)
     {
-        std::queue<MIDIEvent> Empty; std::swap(_Events, Empty);
+        std::queue<midi_event_t> Empty;
+
+        std::swap(_Events, Empty);
         _Position = 0;
 
         _Keyboard->Reset();
@@ -340,8 +347,6 @@ namespace foo_vis_midi
 
     #pragma endregion
 
-    #pragma region("IMIDIReceiver")
-
     /// <summary>
     /// Processes a MIDI message.
     /// </summary>
@@ -350,15 +355,13 @@ namespace foo_vis_midi
         if (_InterfaceVersion != foo_vis_midi::InterfaceVersion)
             return;
 
-        if (!TryEnterCriticalSection(&_Lock))
+        if (!::TryEnterCriticalSection(&_Lock))
             return;
 
-        _Events.push(MIDIEvent(message, timestamp));
+        _Events.push(midi_event_t(message, timestamp));
 
         ::LeaveCriticalSection(&_Lock);
     }
-
-    #pragma endregion
 
     MusicKeyboardWindow * _This = nullptr;
 

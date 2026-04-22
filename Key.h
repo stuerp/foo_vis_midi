@@ -1,12 +1,10 @@
 
-/** $VER: Key.h (2023.01.14) P. Stuer **/
+/** $VER: Key.h (2026.04.22) P. Stuer **/
 
 #pragma once
 
-#include <CppCoreCheck/Warnings.h>
+#include <CppCoreCheck\Warnings.h>
 #pragma warning(disable: 5045 5262 ALL_CPPCORECHECK_WARNINGS)
-
-#include "framework.h"
 
 const float WhiteKeyWidth = 23.5f; // mm
 const float WhiteKeyHeight = 150.0f; // mm
@@ -18,27 +16,27 @@ const float BlackKeyHeight = 90.0f; // mm
 /// Implements a base class for a keyboard key.
 /// </summary>
 #pragma warning(disable: 4820)
-class Key
+class key_t
 {
 public:
-    Key(ID2D1PathGeometry * geometry) : _Geometry(geometry), _IsDown(false) { }
+    key_t(ID2D1PathGeometry * geometry) : _Geometry(geometry), _IsDown(false) { }
 
-    Key(const Key &) = delete;
-    Key & operator=(const Key &) = delete;
-    Key(Key &&) = delete;
-    Key & operator=(Key &&) = delete;
+    key_t(const key_t &) = delete;
+    key_t & operator=(const key_t &) = delete;
+    key_t(key_t &&) = delete;
+    key_t & operator=(key_t &&) = delete;
 
-    virtual ~Key()
+    virtual ~key_t()
     {
     };
 
     virtual HRESULT Measure(D2D1_SIZE_F& size) const noexcept = 0;
     virtual HRESULT Render(ID2D1HwndRenderTarget * renderTarget, ID2D1Brush * whiteBrush, ID2D1Brush * blackBrush, ID2D1Brush * pushedBrush, float& dx) const noexcept = 0;
 
-    float GetHeight() const { return WhiteKeyHeight; }
+    float GetHeight() const noexcept { return WhiteKeyHeight; }
 
-    void Push() { _IsDown = true; }
-    void Release() { _IsDown = false; }
+    void Push() noexcept { _IsDown = true; }
+    void Release() noexcept { _IsDown = false; }
 
 protected:
     ID2D1PathGeometry * _Geometry;
@@ -50,17 +48,17 @@ protected:
 /// Implements a white, left keyboard key.
 /// </summary>
 #pragma warning(disable: 4820)
-class LeftWhiteKey : public Key
+class left_white_key_t : public key_t
 {
 public:
-    LeftWhiteKey(ID2D1PathGeometry * geometry) : Key(geometry) { }
+    left_white_key_t(ID2D1PathGeometry * geometry) : key_t(geometry) { }
 
-    LeftWhiteKey(const LeftWhiteKey &) = delete;
-    LeftWhiteKey & operator=(const LeftWhiteKey &) = delete;
-    LeftWhiteKey(LeftWhiteKey &&) = delete;
-    LeftWhiteKey & operator=(LeftWhiteKey &&) = delete;
+    left_white_key_t(const left_white_key_t &) = delete;
+    left_white_key_t & operator=(const left_white_key_t &) = delete;
+    left_white_key_t(left_white_key_t &&) = delete;
+    left_white_key_t & operator=(left_white_key_t &&) = delete;
 
-    ~LeftWhiteKey() final { };
+    ~left_white_key_t() final { };
 
     virtual HRESULT Measure(D2D1_SIZE_F& size) const noexcept
     {
@@ -77,17 +75,17 @@ public:
 /// Implements a white, middle keyboard key.
 /// </summary>
 #pragma warning(disable: 4820)
-class MiddleWhiteKey : public Key
+class middle_white_key_t : public key_t
 {
 public:
-    MiddleWhiteKey(ID2D1PathGeometry * geometry) : Key(geometry) { }
+    middle_white_key_t(ID2D1PathGeometry * geometry) : key_t(geometry) { }
 
-    MiddleWhiteKey(const MiddleWhiteKey &) = delete;
-    MiddleWhiteKey & operator=(const MiddleWhiteKey &) = delete;
-    MiddleWhiteKey(MiddleWhiteKey &&) = delete;
-    MiddleWhiteKey & operator=(MiddleWhiteKey &&) = delete;
+    middle_white_key_t(const middle_white_key_t &) = delete;
+    middle_white_key_t & operator=(const middle_white_key_t &) = delete;
+    middle_white_key_t(middle_white_key_t &&) = delete;
+    middle_white_key_t & operator=(middle_white_key_t &&) = delete;
 
-    ~MiddleWhiteKey() final { };
+    ~middle_white_key_t() final { };
 
     virtual HRESULT Measure(D2D1_SIZE_F& size) const noexcept
     {
@@ -104,17 +102,17 @@ public:
 /// Implements a white, right keyboard key.
 /// </summary>
 #pragma warning(disable: 4820)
-class RightWhiteKey : public Key
+class right_white_key_t : public key_t
 {
 public:
-    RightWhiteKey(ID2D1PathGeometry * geometry) : Key(geometry) { }
+    right_white_key_t(ID2D1PathGeometry * geometry) : key_t(geometry) { }
 
-    RightWhiteKey(const RightWhiteKey &) = delete;
-    RightWhiteKey & operator=(const RightWhiteKey &) = delete;
-    RightWhiteKey(RightWhiteKey &&) = delete;
-    RightWhiteKey & operator=(RightWhiteKey &&) = delete;
+    right_white_key_t(const right_white_key_t &) = delete;
+    right_white_key_t & operator=(const right_white_key_t &) = delete;
+    right_white_key_t(right_white_key_t &&) = delete;
+    right_white_key_t & operator=(right_white_key_t &&) = delete;
 
-    ~RightWhiteKey() final { };
+    ~right_white_key_t() final { };
 
     virtual HRESULT Measure(D2D1_SIZE_F& size) const noexcept
     {
@@ -131,17 +129,17 @@ public:
 /// Implements a black keyboard key.
 /// </summary>
 #pragma warning(disable: 4820)
-class BlackKey : public Key
+class black_key_t : public key_t
 {
 public:
-    BlackKey() : Key(nullptr) { };
+    black_key_t() : key_t(nullptr) { };
 
-    BlackKey(const BlackKey &) = delete;
-    BlackKey & operator=(const BlackKey &) = delete;
-    BlackKey(BlackKey &&) = delete;
-    BlackKey & operator=(BlackKey &&) = delete;
+    black_key_t(const black_key_t &) = delete;
+    black_key_t & operator=(const black_key_t &) = delete;
+    black_key_t(black_key_t &&) = delete;
+    black_key_t & operator=(black_key_t &&) = delete;
 
-    ~BlackKey() final { };
+    ~black_key_t() final { };
 
     virtual HRESULT Measure(D2D1_SIZE_F& size) const noexcept
     {
@@ -161,17 +159,17 @@ private:
 /// Implements a white keyboard key.
 /// </summary>
 #pragma warning(disable: 4820)
-class WhiteKey : public Key
+class white_key_t : public key_t
 {
 public:
-    WhiteKey() : Key(nullptr) { };
+    white_key_t() : key_t(nullptr) { };
 
-    WhiteKey(const WhiteKey &) = delete;
-    WhiteKey & operator=(const WhiteKey &) = delete;
-    WhiteKey(WhiteKey &&) = delete;
-    WhiteKey & operator=(WhiteKey &&) = delete;
+    white_key_t(const white_key_t &) = delete;
+    white_key_t & operator=(const white_key_t &) = delete;
+    white_key_t(white_key_t &&) = delete;
+    white_key_t & operator=(white_key_t &&) = delete;
 
-    ~WhiteKey() final { };
+    ~white_key_t() final { };
 
     virtual HRESULT Measure(D2D1_SIZE_F& size) const noexcept
     {

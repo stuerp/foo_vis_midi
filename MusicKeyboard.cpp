@@ -1,10 +1,10 @@
 
 /** $VER: MusicKeyboard.cpp (2023.12.24) P. Stuer **/
 
-#include <CppCoreCheck/Warnings.h>
-#pragma warning(disable: 5045 5262 ALL_CPPCORECHECK_WARNINGS)
+#include "pch.h"
 
-#include "framework.h"
+#include <CppCoreCheck\Warnings.h>
+#pragma warning(disable: 5045 5262 ALL_CPPCORECHECK_WARNINGS)
 
 #include "MusicKeyboard.h"
 #include "MusicKeyboardUIElement.h"

@@ -5,21 +5,19 @@
 
 using namespace std;
 
-#include <CppCoreCheck/Warnings.h>
+#include <CppCoreCheck\Warnings.h>
 #pragma warning(disable: 5045 5262 ALL_CPPCORECHECK_WARNINGS)
 
-#include "framework.h"
-
-#include <atlbase.h> // CComPtr
+#include <atlcomcli.h> // CComPtr
 
 #include "Key.h"
 
 #pragma warning(disable: 4820)
-class Keyboard
+class keyboard_t
 {
 public:
-    Keyboard();
-    ~Keyboard();
+    keyboard_t();
+    ~keyboard_t();
 
     float GetWidth() const noexcept
     {
@@ -31,7 +29,7 @@ public:
         return _Keys[0]->GetHeight() * _ScaleMatrix.m22;
     }
 
-    void SetScale(float scale)
+    void SetScale(float scale) noexcept
     {
         _ScaleMatrix = D2D1::Matrix3x2F::Scale(D2D1::Size(scale, scale));
     }
@@ -70,8 +68,8 @@ public:
     }
 
     #pragma region("Direct2D")
-    HRESULT CreateDeviceIndependentResources(ID2D1Factory * d2DFactory);
-    HRESULT CreateDeviceDependentResources(ID2D1HwndRenderTarget * renderTarget);
+    HRESULT CreateDeviceIndependentResources(ID2D1Factory * d2DFactory) noexcept;
+    HRESULT CreateDeviceDependentResources(ID2D1HwndRenderTarget * renderTarget) noexcept;
     void Dispose() noexcept;
 
     HRESULT Render(ID2D1HwndRenderTarget * renderTarget, float x, float y) const noexcept;
@@ -81,7 +79,7 @@ private:
     float MeasureWidth() const noexcept;
 
 private:
-    vector<unique_ptr<Key>> _Keys;
+    vector<unique_ptr<key_t>> _Keys;
     float _Width;
 
     #pragma region("Direct2D")

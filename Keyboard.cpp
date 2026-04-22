@@ -1,15 +1,17 @@
 
 /** $VER: Keyboard.cpp (2023.01.15) P. Stuer **/
 
+#include "pch.h"
+
 #include "Keyboard.h"
+#include "Key.h"
 
 #pragma hdrstop
 
 /// <summary>
 /// Initializes a new instance of the class.
 /// </summary>
-Keyboard::Keyboard() :
-    _Width(0.f)
+keyboard_t::keyboard_t() : _Width(0.f)
 {
     SetScale(1.0f);
 }
@@ -17,7 +19,7 @@ Keyboard::Keyboard() :
 /// <summary>
 /// Deletes this instance of the class.
 /// </summary>
-Keyboard::~Keyboard()
+keyboard_t::~keyboard_t()
 {
     Dispose();
 }
@@ -25,15 +27,15 @@ Keyboard::~Keyboard()
 /// <summary>
 /// Renders the object.
 /// </summary>
-HRESULT Keyboard::Render(ID2D1HwndRenderTarget * renderTarget, float x, float y) const noexcept
+HRESULT keyboard_t::Render(ID2D1HwndRenderTarget * renderTarget, float x, float y) const noexcept
 {
-    for (auto& Iterator : _Keys)
+    for (auto & Key : _Keys)
     {
         float dx;
 
         renderTarget->SetTransform(_ScaleMatrix * D2D1::Matrix3x2F::Translation(x, y));
 
-        Iterator->Render(renderTarget, _WhiteBrush, _BlackBrush, _PushedBrush, dx);
+        Key->Render(renderTarget, _WhiteBrush, _BlackBrush, _PushedBrush, dx);
 
         x += dx * _ScaleMatrix.m11;
     }
@@ -44,15 +46,15 @@ HRESULT Keyboard::Render(ID2D1HwndRenderTarget * renderTarget, float x, float y)
 /// <summary>
 /// Gets the width of the keyboard.
 /// </summary>
-float Keyboard::MeasureWidth() const noexcept
+float keyboard_t::MeasureWidth() const noexcept
 {
     float Width = 0.f;
 
-    for (auto& Iterator : _Keys)
+    for (auto & Key : _Keys)
     {
         D2D1_SIZE_F KeySize;
 
-        Iterator->Measure(KeySize);
+        Key->Measure(KeySize);
 
         Width += KeySize.width + 1.f;
     }
@@ -63,7 +65,7 @@ float Keyboard::MeasureWidth() const noexcept
 /// <summary>
 /// Creates the device-independent resources.
 /// </summary>
-HRESULT Keyboard::CreateDeviceIndependentResources(ID2D1Factory * d2DFactory)
+HRESULT keyboard_t::CreateDeviceIndependentResources(ID2D1Factory * d2DFactory) noexcept
 {
     // Create the left white key.
     HRESULT hr = d2DFactory->CreatePathGeometry(&_LeftWhitePathGeometry);
@@ -163,28 +165,28 @@ HRESULT Keyboard::CreateDeviceIndependentResources(ID2D1Factory * d2DFactory)
     // Create the keys. Middle C = MIDI 60 = Index = 39.
     _Keys.reserve(88);
 
-    _Keys.push_back(make_unique<LeftWhiteKey>(_LeftWhitePathGeometry));
-    _Keys.push_back(make_unique<BlackKey>());
-    _Keys.push_back(make_unique<RightWhiteKey>(_RightWhitePathGeometry));
+    _Keys.push_back(make_unique<left_white_key_t>(_LeftWhitePathGeometry));
+    _Keys.push_back(make_unique<black_key_t>());
+    _Keys.push_back(make_unique<right_white_key_t>(_RightWhitePathGeometry));
 
-    for (size_t i = 0; i < 7; i++)
+    for (size_t i = 0; i < 7; ++i)
     {
-        _Keys.push_back(make_unique<LeftWhiteKey>(_LeftWhitePathGeometry));
-        _Keys.push_back(make_unique<BlackKey>());
-        _Keys.push_back(make_unique<MiddleWhiteKey>(_MiddleWhitePathGeometry));
-        _Keys.push_back(make_unique<BlackKey>());
-        _Keys.push_back(make_unique<RightWhiteKey>(_RightWhitePathGeometry));
+        _Keys.push_back(make_unique<left_white_key_t>(_LeftWhitePathGeometry));
+        _Keys.push_back(make_unique<black_key_t>());
+        _Keys.push_back(make_unique<middle_white_key_t>(_MiddleWhitePathGeometry));
+        _Keys.push_back(make_unique<black_key_t>());
+        _Keys.push_back(make_unique<right_white_key_t>(_RightWhitePathGeometry));
 
-        _Keys.push_back(make_unique<LeftWhiteKey>(_LeftWhitePathGeometry));
-        _Keys.push_back(make_unique<BlackKey>());
-        _Keys.push_back(make_unique<MiddleWhiteKey>(_MiddleWhitePathGeometry));
-        _Keys.push_back(make_unique<BlackKey>());
-        _Keys.push_back(make_unique<MiddleWhiteKey>(_MiddleWhitePathGeometry));
-        _Keys.push_back(make_unique<BlackKey>());
-        _Keys.push_back(make_unique<RightWhiteKey>(_RightWhitePathGeometry));
+        _Keys.push_back(make_unique<left_white_key_t>(_LeftWhitePathGeometry));
+        _Keys.push_back(make_unique<black_key_t>());
+        _Keys.push_back(make_unique<middle_white_key_t>(_MiddleWhitePathGeometry));
+        _Keys.push_back(make_unique<black_key_t>());
+        _Keys.push_back(make_unique<middle_white_key_t>(_MiddleWhitePathGeometry));
+        _Keys.push_back(make_unique<black_key_t>());
+        _Keys.push_back(make_unique<right_white_key_t>(_RightWhitePathGeometry));
     }
 
-    _Keys.push_back(make_unique<WhiteKey>());
+    _Keys.push_back(make_unique<white_key_t>());
 
     _Width = MeasureWidth();
 
@@ -194,7 +196,7 @@ HRESULT Keyboard::CreateDeviceIndependentResources(ID2D1Factory * d2DFactory)
 /// <summary>
 /// Creates the device-dependent resources.
 /// </summary>
-HRESULT Keyboard::CreateDeviceDependentResources(ID2D1HwndRenderTarget * renderTarget)
+HRESULT keyboard_t::CreateDeviceDependentResources(ID2D1HwndRenderTarget * renderTarget) noexcept
 {
     HRESULT hr = renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &_BlackBrush);
 
@@ -210,6 +212,6 @@ HRESULT Keyboard::CreateDeviceDependentResources(ID2D1HwndRenderTarget * renderT
 /// <summary>
 /// Disposes the device-dependent resources.
 /// </summary>
-void Keyboard::Dispose() noexcept
+void keyboard_t::Dispose() noexcept
 {
 }

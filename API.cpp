@@ -1,11 +1,12 @@
 
 /** $VER: API.cpp (2023.01.09) P. Stuer **/
 
-#include <CppCoreCheck/Warnings.h>
+#include "pch.h"
+
+#include <CppCoreCheck\Warnings.h>
 #pragma warning(disable: 5045 5262 ALL_CPPCORECHECK_WARNINGS)
 
-#include "framework.h"
-
+#include "API.h"
 #include "MusicKeyboard.h"
 
 #pragma hdrstop

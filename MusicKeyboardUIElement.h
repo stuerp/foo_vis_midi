@@ -3,10 +3,8 @@
 
 #pragma once
 
-#include <CppCoreCheck/Warnings.h>
+#include <CppCoreCheck\Warnings.h>
 #pragma warning(disable: 5045 5262 ALL_CPPCORECHECK_WARNINGS)
-
-#include "framework.h"
 
 #include <queue>
 
@@ -17,8 +15,8 @@
 #include <helpers/BumpableElem.h>
 #include <libPPUI/win32_op.h>
 
-#include "IMIDIReceiver.h"
 #include "Keyboard.h"
+#include "Resources.h"
 
 namespace foo_vis_midi
 {
@@ -53,7 +51,7 @@ public:
 
     #pragma endregion
 
-    #pragma region("ui_element_instance")
+    #pragma region ui_element_instance
 
     /// <summary>
     /// 
@@ -140,11 +138,20 @@ public:
 
     #pragma endregion
 
-    #pragma region IMIDIReceiver
+    #pragma region IMusicKeyboard
 
-    void Initialize(uint32_t interfaceVersion) noexcept { _InterfaceVersion = interfaceVersion; }
+    void Initialize(uint32_t interfaceVersion) noexcept
+    {
+        _InterfaceVersion = interfaceVersion;
+    }
+
     void ProcessMessage(uint32_t message, uint32_t timestamp) noexcept;
-    void SetPosition(uint32_t position)  noexcept { _Position = position; Invalidate(); }
+
+    void SetPosition(uint32_t position) noexcept
+    {
+        _Position = position;
+        Invalidate();
+    }
 
     #pragma endregion
 
@@ -185,29 +192,29 @@ private:
 private:
     #pragma region Rendering
 
-    HRESULT Render();
+    HRESULT Render() noexcept;
 
-    void SetScale(ID2D1RenderTarget * renderTarget);
+    void SetScale(ID2D1RenderTarget * renderTarget) noexcept;
 
     #pragma endregion
 
     #pragma region Direct2D
 
-    HRESULT CreateDeviceIndependentResources();
-    HRESULT CreateDeviceDependentResources();
-    HRESULT CreateGridPatternBrush(ID2D1RenderTarget *, ID2D1BitmapBrush **);
-    void Dispose();
+    HRESULT CreateDeviceIndependentResources() noexcept;
+    HRESULT CreateDeviceDependentResources() noexcept;
+    HRESULT CreateGridPatternBrush(ID2D1RenderTarget *, ID2D1BitmapBrush **) noexcept;
+    void Dispose() noexcept;
 
     #pragma endregion
 
 private:
-    struct MIDIEvent
+    struct midi_event_t
     {
         uint32_t Message;
         uint32_t Timestamp;
 
-        MIDIEvent() : Message(0), Timestamp(~0U) { }
-        MIDIEvent(uint32_t message, uint32_t timestamp) : Message(message), Timestamp(timestamp) { }
+        midi_event_t() : Message(0), Timestamp(~0U) { }
+        midi_event_t(uint32_t message, uint32_t timestamp) : Message(message), Timestamp(timestamp) { }
 
         bool IsValid() const noexcept { return Timestamp != ~0U; }
     };
@@ -217,7 +224,7 @@ private:
     PTP_TIMER _ThreadPoolTimer;
     uint32_t _Position;
 
-    std::queue<MIDIEvent> _Events;
+    std::queue<midi_event_t> _Events;
 
     ui_element_config::ptr _Config;
 
@@ -232,7 +239,7 @@ private:
 
     #pragma endregion
 
-    std::unique_ptr<Keyboard> _Keyboard;
+    std::unique_ptr<keyboard_t> _Keyboard;
 };
 #pragma warning(default: 4820)
 

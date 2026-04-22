@@ -66,34 +66,39 @@ To create the component first build the x86 configuration and next the x64 confi
 
 ## Change Log
 
+vNext, 2026-xx-xx
+
+- Code cleanup
+- Changed: Builds with Visual Studio 2026.
+
 v0.1.0, 2023-12-24, *"Merry Christmas"*
 
-* Initial release.
+- Initial release.
 
 ## Acknowledgements / Credits
 
-* Peter Pawlowski for the [foobar2000](https://www.foobar2000.org/) audio player. ![foobar2000](https://www.foobar2000.org/button-small.png)
+- Peter Pawlowski for the [foobar2000](https://www.foobar2000.org/) audio player. ![foobar2000](https://www.foobar2000.org/button-small.png)
 
 ## Reference Material
 
 ### foobar2000
 
-  * [foobar2000 Development](https://wiki.hydrogenaud.io/index.php?title=Foobar2000:Development:Overview)
+- [foobar2000 Development](https://wiki.hydrogenaud.io/index.php?title=Foobar2000:Development:Overview)
 
 ### Windows User Interface
 
-  * [Desktop App User Interface](https://learn.microsoft.com/en-us/windows/win32/windows-application-ui-development)
-  * [Windows User Experience Interaction Guidelines](https://learn.microsoft.com/en-us/windows/win32/uxguide/guidelines)
-  * [Windows Controls](https://learn.microsoft.com/en-us/windows/win32/controls/window-controls)
-  * [Control Library](https://learn.microsoft.com/en-us/windows/win32/controls/individual-control-info)
-  * [Resource-Definition Statements](https://learn.microsoft.com/en-us/windows/win32/menurc/resource-definition-statements)
-  * [Visuals, Layout](https://learn.microsoft.com/en-us/windows/win32/uxguide/vis-layout)
+- [Desktop App User Interface](https://learn.microsoft.com/en-us/windows/win32/windows-application-ui-development)
+- [Windows User Experience Interaction Guidelines](https://learn.microsoft.com/en-us/windows/win32/uxguide/guidelines)
+- [Windows Controls](https://learn.microsoft.com/en-us/windows/win32/controls/window-controls)
+- [Control Library](https://learn.microsoft.com/en-us/windows/win32/controls/individual-control-info)
+- [Resource-Definition Statements](https://learn.microsoft.com/en-us/windows/win32/menurc/resource-definition-statements)
+- [Visuals, Layout](https://learn.microsoft.com/en-us/windows/win32/uxguide/vis-layout)
 
 ## Links
 
-* Home page: [https://github.com/stuerp/foo_vis_midi](https://github.com/stuerp/foo_vis_midi)
-* Repository: [https://github.com/stuerp/foo_vis_midi.git](https://github.com/stuerp/foo_vis_midi.git)
-* Issue tracker: [https://github.com/stuerp/foo_vis_midi/issues](https://github.com/stuerp/foo_vis_midi/issues)
+- Home page: [https://github.com/stuerp/foo_vis_midi](https://github.com/stuerp/foo_vis_midi)
+- Repository: [https://github.com/stuerp/foo_vis_midi.git](https://github.com/stuerp/foo_vis_midi.git)
+- Issue tracker: [https://github.com/stuerp/foo_vis_midi/issues](https://github.com/stuerp/foo_vis_midi/issues)
 
 ## License
 

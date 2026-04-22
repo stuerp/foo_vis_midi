@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include <CppCoreCheck/Warnings.h>
+#include <CppCoreCheck\Warnings.h>
 #pragma warning(disable: 4514 5045 5262 ALL_CPPCORECHECK_WARNINGS)
 
-#include <sdk/foobar2000-lite.h>
+#include "API.h"
 
 namespace foo_vis_midi
 {

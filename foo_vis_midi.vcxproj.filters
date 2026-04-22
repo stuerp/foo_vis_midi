@@ -9,13 +9,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="API.h" />
-    <ClInclude Include="framework.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="MusicKeyboard.h" />
     <ClInclude Include="MusicKeyboardUIElement.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Keyboard.h" />
-    <ClInclude Include="IMIDIReceiver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component.cpp" />
@@ -24,6 +23,7 @@
     <ClCompile Include="MusicKeyboardUIElement.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources.rc" />
